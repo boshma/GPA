@@ -1,19 +1,22 @@
 import Link from "next/link";
 import { db } from "~/server/db";
 
+export const dynamic = "force-dynamic";
+
 
 export default async function HomePage() {
 
-  const posts = await db.query.posts.findMany();
+  const images = await db.query.images.findMany();
+
 
   return (
     <main className="">
       Hello, in progresss
       <ul>
-        {posts.map((post) => (
-          <li key={post.id}>
-            <Link href={`/posts/${post.id}`}>
-              {post.name}
+        {images.map((image) => (
+          <li key={image.id}>
+            <Link href={`/posts/${image.id}`}>
+              {image.name}
             </Link>
           </li>
         ))}
