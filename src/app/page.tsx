@@ -2,11 +2,12 @@ import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link";
 import { db } from "~/server/db";
 import Image from "next/image";
+import { getMyImages } from "~/server/queries";
 
 export const dynamic = "force-dynamic";
 
 async function Images() {
-  const images = await db.query.images.findMany();
+  const images = await await getMyImages();
 
   return (
     <div className="flex flex-wrap justify-center gap-4 p-4">
