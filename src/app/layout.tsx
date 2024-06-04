@@ -18,8 +18,10 @@ export const metadata = {
 
 export default function RootLayout({
   children,
+  modal,
 }: {
   children: React.ReactNode;
+  modal: React.ReactNode;
 }) {
   return (
     <ClerkProvider>
@@ -31,11 +33,13 @@ export default function RootLayout({
            * leaked to the client. The data passed to the client is the same
            * as if you were to fetch `/api/uploadthing` directly.
            */
-          routerConfig={extractRouterConfig(ourFileRouter)}d
+          routerConfig={extractRouterConfig(ourFileRouter)}
         />
       <body className={`font-sans ${GeistSans.variable}`}>
         <TopNav />
         {children}
+        {modal}
+        <div id="modal-root" />
         </body>
     </html>
     </ClerkProvider>
