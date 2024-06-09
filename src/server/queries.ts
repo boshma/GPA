@@ -1,8 +1,8 @@
 import "server-only";
 import { db } from "./db";
 import { auth } from "@clerk/nextjs/server";
-import { and, eq } from "drizzle-orm";
-import { images } from "./db/schema";
+import { and, eq, sql } from "drizzle-orm";
+import { foodEntries, images } from "./db/schema";
 import { redirect } from "next/navigation";
 import analyticsServerClient from "./analytics";
 
@@ -66,4 +66,38 @@ export async function deleteImage(id: number) {
         orderBy: (model, { desc }) => desc(model.date),
     });
     return meals;
+}
+
+
+
+export async function addMeal(name: string, protein: number, carbs: number, fat: number) {
+  const user = auth();
+  if (!user.userId) throw new Error("Not authenticated");
+
+  const date = new Date().toISOString().split('T')[0]; // Convert Date to YYYY-MM-DD format
+  const now = new Date().toISOString(); // Get current timestamp for createdAt and updatedAt
+
+  await db.insert(foodEntries).values({
+      name: sql`${name}`,
+      protein: sql`${protein}`,
+      carbs: sql`${carbs}`,
+      fat: sql`${fat}`,
+      userId: sql`${user.userId}`,
+      date: sql`${date}`,
+      createdAt: sql`${now}`,
+      updatedAt: sql`${now}`,
+  });
+
+  analyticsServerClient.capture({
+      distinctId: user.userId,
+      event: "add meal",
+      properties: {
+          name,
+          protein,
+          carbs,
+          fat,
+      },
+  });
+
+  redirect("/meals");
 }

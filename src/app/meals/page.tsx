@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getMyImages } from "~/server/queries";
 import MealTable from "../_meals/meal-table";
+import { AddMealForm } from "../_meals/add-meal";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +17,7 @@ export default function MealsPage() {
         </div>
       </SignedOut>
       <SignedIn>
+        <AddMealForm />
         <MealTable />
       </SignedIn>
     </main>
