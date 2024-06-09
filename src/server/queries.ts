@@ -55,3 +55,15 @@ export async function deleteImage(id: number) {
   
     redirect("/");
   }
+
+  export async function getMyMeals() {
+    const user = auth();
+
+    if (!user.userId) throw new Error("Not authenticated");
+
+    const meals = await db.query.foodEntries.findMany({
+        where: (model, { eq }) => eq(model.userId, user.userId),
+        orderBy: (model, { desc }) => desc(model.date),
+    });
+    return meals;
+}

@@ -51,7 +51,6 @@ export const foodEntries = createTable(
     carbs: doublePrecision("carbs").notNull(),
     fat: doublePrecision("fat").notNull(),
     date: date("date").notNull(),
-    servingSize: doublePrecision("serving_size").default(1).notNull(),
     userId: varchar("user_id", { length: 256 }).notNull(),
   },
   (foodEntry) => ({

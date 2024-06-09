@@ -2,7 +2,7 @@ import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link";
 import Image from "next/image";
 import { getMyImages } from "~/server/queries";
-import MealTable from "../_food/food-table";
+import MealTable from "../_meals/meal-table";
 
 export const dynamic = "force-dynamic";
 
