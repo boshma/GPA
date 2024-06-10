@@ -17,7 +17,7 @@ export default function MealsPage() {
         </div>
       </SignedOut>
       <SignedIn>
-        <AddMealForm />
+      <Link href={`/addMeal`}>add meal</Link>
         <MealTable />
       </SignedIn>
     </main>
