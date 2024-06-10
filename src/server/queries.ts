@@ -101,3 +101,38 @@ export async function addMeal(name: string, protein: number, carbs: number, fat:
 
   redirect("/meals");
 }
+
+export async function getMealById(id: string) {
+  const user = auth();
+
+  if (!user.userId) throw new Error("Not authenticated");
+
+  const meal = await db.query.foodEntries.findFirst({
+      where: (model, { eq }) => eq(model.id, id),
+  });
+
+  if (!meal) throw new Error("Meal not found");
+
+  if (meal.userId !== user.userId) throw new Error("Not authorized");
+
+  return meal;
+}
+
+export async function deleteMeal(id: string) {
+  const user = auth();
+  if (!user.userId) throw new Error("Unauthorized");
+
+  await db
+    .delete(foodEntries)
+    .where(and(eq(foodEntries.id, id), eq(foodEntries.userId, user.userId)));
+
+  analyticsServerClient.capture({
+    distinctId: user.userId,
+    event: "delete meal",
+    properties: {
+      mealId: id,
+    },
+  });
+
+  redirect("/meals");
+}
