@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
     Table,
     TableBody,
@@ -28,11 +29,31 @@ export default async function MealTable() {
             <TableBody>
                 {meals.map((meal) => (
                     <TableRow key={meal.id}>
-                        <TableCell className="font-medium">{meal.name}</TableCell>
-                        <TableCell>{meal.protein}</TableCell>
-                        <TableCell>{meal.carbs}</TableCell>
-                        <TableCell>{meal.fat}</TableCell>
-                        <TableCell>{meal.protein * 4 + meal.carbs * 4 + meal.fat * 9}</TableCell>
+                        <TableCell className="font-medium">
+                            <Link href={`/meal/${meal.id}`}>
+                                {meal.name}
+                            </Link>
+                        </TableCell>
+                        <TableCell>
+                            <Link href={`/meal/${meal.id}`}>
+                                {meal.protein}
+                            </Link>
+                        </TableCell>
+                        <TableCell>
+                            <Link href={`/meal/${meal.id}`}>
+                                {meal.carbs}
+                            </Link>
+                        </TableCell>
+                        <TableCell>
+                            <Link href={`/meal/${meal.id}`}>
+                                {meal.fat}
+                            </Link>
+                        </TableCell>
+                        <TableCell>
+                            <Link href={`/meal/${meal.id}`}>
+                                {meal.protein * 4 + meal.carbs * 4 + meal.fat * 9}
+                            </Link>
+                        </TableCell>
                     </TableRow>
                 ))}
             </TableBody>
@@ -40,7 +61,7 @@ export default async function MealTable() {
                 <TableRow>
                     <TableCell colSpan={4}>Total</TableCell>
                     <TableCell className="">
-                        {meals.reduce((total, meal) => total +  (meal.protein * 4 + meal.carbs * 4 + meal.fat * 9), 0)}
+                        {meals.reduce((total, meal) => total + (meal.protein * 4 + meal.carbs * 4 + meal.fat * 9), 0)}
                     </TableCell>
                 </TableRow>
             </TableFooter>
