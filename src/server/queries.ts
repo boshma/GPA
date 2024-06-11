@@ -136,3 +136,34 @@ export async function deleteMeal(id: string) {
 
   redirect("/meals");
 }
+
+export async function updateMeal(id: string, name: string, protein: number, carbs: number, fat: number) {
+  const user = auth();
+  if (!user.userId) throw new Error("Not authenticated");
+
+  const now = new Date().toISOString(); // Get current timestamp for updatedAt
+
+  await db.update(foodEntries)
+    .set({
+      name: sql`${name}`,
+      protein: sql`${protein}`,
+      carbs: sql`${carbs}`,
+      fat: sql`${fat}`,
+      updatedAt: sql`${now}`
+    })
+    .where(and(eq(foodEntries.id, id), eq(foodEntries.userId, user.userId)));
+
+  analyticsServerClient.capture({
+    distinctId: user.userId,
+    event: "update meal",
+    properties: {
+      mealId: id,
+      name,
+      protein,
+      carbs,
+      fat,
+    },
+  });
+
+  redirect(`/meals`);
+}
