@@ -1,5 +1,6 @@
 import { clerkClient } from "@clerk/nextjs/server";
 import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
 import { deleteMeal, getMealById, updateMeal } from "~/server/queries";
 
 export async function EditMealForm(props: { mealId: string }) {
@@ -28,25 +29,25 @@ export async function EditMealForm(props: { mealId: string }) {
           <div className="mb-2">
             <label>
               <strong>Name:</strong>
-              <input type="text" name="name" defaultValue={meal.name} required />
+              <Input type="text" name="name" defaultValue={meal.name} required />
             </label>
           </div>
           <div className="mb-2">
             <label>
               <strong>Protein (g):</strong>
-              <input type="number" name="protein" defaultValue={meal.protein} required />
+              <Input type="number" name="protein" defaultValue={meal.protein} required />
             </label>
           </div>
           <div className="mb-2">
             <label>
               <strong>Carbs (g):</strong>
-              <input type="number" name="carbs" defaultValue={meal.carbs} required />
+              <Input type="number" name="carbs" defaultValue={meal.carbs} required />
             </label>
           </div>
           <div className="mb-2">
             <label>
               <strong>Fats (g):</strong>
-              <input type="number" name="fat" defaultValue={meal.fat} required />
+              <Input type="number" name="fat" defaultValue={meal.fat} required />
             </label>
           </div>
           <Button type="submit" variant="default">

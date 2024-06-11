@@ -1,5 +1,6 @@
 import { addMeal } from "~/server/queries";
 import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
 
 export async function AddMealForm() {
   const handleSubmit = async (formData: FormData) => {
@@ -17,19 +18,19 @@ export async function AddMealForm() {
     <form action={handleSubmit}>
       <div>
         <label htmlFor="name">Meal Name:</label>
-        <input type="text" name="name" id="name" required />
+        <Input type="text" name="name" id="name" required />
       </div>
       <div>
         <label htmlFor="protein">Protein (g):</label>
-        <input type="number" name="protein" id="protein" required />
+        <Input type="number" name="protein" id="protein" required />
       </div>
       <div>
         <label htmlFor="carbs">Carbs (g):</label>
-        <input type="number" name="carbs" id="carbs" required />
+        <Input type="number" name="carbs" id="carbs" required />
       </div>
       <div>
         <label htmlFor="fat">Fat (g):</label>
-        <input type="number" name="fat" id="fat" required />
+        <Input type="number" name="fat" id="fat" required />
       </div>
       <Button type="submit">Add Meal</Button>
     </form>
