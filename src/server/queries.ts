@@ -55,20 +55,20 @@ export async function deleteImage(id: number) {
   
     redirect("/");
   }
-
-  export async function getMyMeals() {
+  export async function getMyMeals(date: string) {
     const user = auth();
 
     if (!user.userId) throw new Error("Not authenticated");
 
     const meals = await db.query.foodEntries.findMany({
-        where: (model, { eq }) => eq(model.userId, user.userId),
+        where: (model, { and }) => and(
+            eq(model.userId, user.userId),
+            eq(model.date, date)
+        ),
         orderBy: (model, { desc }) => desc(model.date),
     });
     return meals;
 }
-
-
 
 export async function addMeal(name: string, protein: number, carbs: number, fat: number) {
   const user = auth();

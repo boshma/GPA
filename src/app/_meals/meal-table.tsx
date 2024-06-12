@@ -12,7 +12,10 @@ import {
 import { getMyMeals } from "~/server/queries";
 
 export default async function MealTable() {
-    const meals = await getMyMeals();
+    const today = new Date().toISOString().split('T')[0] || ''; // Format as YYYY-MM-DD or use an empty string as default
+
+    // Fetch meals for today's date
+    const meals = await getMyMeals(today);;
 
     return (
         <Table>
