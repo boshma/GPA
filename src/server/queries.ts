@@ -1,3 +1,4 @@
+//server/queries.ts (server actions)
 import "server-only";
 import { db } from "./db";
 import { auth } from "@clerk/nextjs/server";
@@ -53,7 +54,7 @@ export async function deleteImage(id: number) {
         },
       });
   
-    redirect("/");
+    redirect("/images");
   }
 
   export async function getMyMeals() {
