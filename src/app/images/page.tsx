@@ -1,4 +1,3 @@
-//src/app/images/page.tsx
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link";
 import Image from "next/image";

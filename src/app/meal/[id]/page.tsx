@@ -1,4 +1,3 @@
-//src/app/editMeal/[id]/page.tsx
 import { EditMealForm } from "~/app/_meals/edit-food";
 
 export default async function EditMealModal({

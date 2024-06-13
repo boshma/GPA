@@ -1,4 +1,3 @@
-//src/app/img/[id]/page.tsx
 import { FullPageImageView } from "~/components/full-image-page";
 
 export default function PhotoPage({

@@ -1,4 +1,3 @@
-//src/app/_meals/meal-table.tsx
 import Link from "next/link";
 import {
     Table,
@@ -31,27 +30,27 @@ export default async function MealTable() {
                 {meals.map((meal) => (
                     <TableRow key={meal.id}>
                         <TableCell className="font-medium">
-                            <Link href={`/editMeal/${meal.id}`}>
+                            <Link href={`/meal/${meal.id}`}>
                                 {meal.name}
                             </Link>
                         </TableCell>
                         <TableCell>
-                            <Link href={`/editMeal/${meal.id}`}>
+                            <Link href={`/meal/${meal.id}`}>
                                 {meal.protein}
                             </Link>
                         </TableCell>
                         <TableCell>
-                            <Link href={`/editMeal/${meal.id}`}>
+                            <Link href={`/meal/${meal.id}`}>
                                 {meal.carbs}
                             </Link>
                         </TableCell>
                         <TableCell>
-                            <Link href={`/editMeal/${meal.id}`}>
+                            <Link href={`/meal/${meal.id}`}>
                                 {meal.fat}
                             </Link>
                         </TableCell>
                         <TableCell>
-                            <Link href={`/editMeal/${meal.id}`}>
+                            <Link href={`/meal/${meal.id}`}>
                                 {meal.protein * 4 + meal.carbs * 4 + meal.fat * 9}
                             </Link>
                         </TableCell>
