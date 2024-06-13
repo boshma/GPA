@@ -53,7 +53,7 @@ export async function deleteImage(id: number) {
         },
       });
   
-    redirect("/");
+    redirect("/images");
   }
 
   export async function getMyMeals() {
