@@ -24,18 +24,6 @@ export function MealsTopNav() {
 
   const formatDate = (date: Date) => date.toISOString().split('T')[0];
 
-  const getPreviousDay = (date: Date) => {
-    const previousDay = new Date(date);
-    previousDay.setDate(previousDay.getDate() - 1);
-    return previousDay;
-  };
-
-  const getNextDay = (date: Date) => {
-    const nextDay = new Date(date);
-    nextDay.setDate(nextDay.getDate() + 1);
-    return nextDay;
-  };
-
   const handleDayClick = (date: Date) => {
     router.push(`/meals/${formatDate(date)}`);
     setIsCalendarVisible(false); // Hide calendar after selecting a date
@@ -51,15 +39,9 @@ export function MealsTopNav() {
         <Link href="/addMeal">Add Meal</Link>
       </div>
       <div className="flex flex-row gap-4 items-center">
-        <Link href={`/meals/${formatDate(getPreviousDay(currentDate))}`}>
-          Yesterday
-        </Link>
         <span onClick={toggleCalendarVisibility} style={{ cursor: "pointer" }}>
           {formatDate(currentDate)}
         </span>
-        <Link href={`/meals/${formatDate(getNextDay(currentDate))}`}>
-          Tomorrow
-        </Link>
       </div>
       {isCalendarVisible && (
         <div className="absolute top-full mt-2 left-1/2 transform -translate-x-1/2 bg-black z-10 shadow-lg border rounded">
