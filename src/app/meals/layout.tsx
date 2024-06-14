@@ -1,6 +1,6 @@
+// src/app/meals/layout.tsx
 import "~/styles/globals.css";
 import { MealsTopNav } from "../_components/mealstopnav";
-
 
 export default function Layout({
   children,
@@ -9,9 +9,9 @@ export default function Layout({
   modal: React.ReactNode;
 }) {
   return (
-          <div className="h-screen grid grid-rows-[auto,1fr]">
-            <MealsTopNav/>
-           <main className="overflow-y-scroll"> {children}</main>
-          </div>
+    <div className="h-screen grid grid-rows-[auto,1fr]">
+      <MealsTopNav />
+      <main className="overflow-y-scroll">{children}</main>
+    </div>
   );
 }

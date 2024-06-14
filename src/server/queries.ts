@@ -75,8 +75,8 @@ export async function addMeal(name: string, protein: number, carbs: number, fat:
   const user = auth();
   if (!user.userId) throw new Error("Not authenticated");
 
-  const date = new Date().toISOString().split('T')[0]; // Convert Date to YYYY-MM-DD format
-  const now = new Date().toISOString(); // Get current timestamp for createdAt and updatedAt
+  const date = new Date().toISOString().split('T')[0];
+  const now = new Date().toISOString(); 
 
   await db.insert(foodEntries).values({
       name: sql`${name}`,
@@ -100,7 +100,7 @@ export async function addMeal(name: string, protein: number, carbs: number, fat:
       },
   });
 
-  redirect("/meals");
+  redirect(`/meals/${date}`);
 }
 
 export async function getMealById(id: string) {
@@ -123,8 +123,14 @@ export async function deleteMeal(id: string) {
   const user = auth();
   if (!user.userId) throw new Error("Unauthorized");
 
-  await db
-    .delete(foodEntries)
+  const meal = await db.query.foodEntries.findFirst({
+    where: (model, { eq }) => eq(model.id, id),
+  });
+
+  if (!meal) throw new Error("Meal not found");
+  if (meal.userId !== user.userId) throw new Error("Not authorized");
+
+  await db.delete(foodEntries)
     .where(and(eq(foodEntries.id, id), eq(foodEntries.userId, user.userId)));
 
   analyticsServerClient.capture({
@@ -135,8 +141,10 @@ export async function deleteMeal(id: string) {
     },
   });
 
-  redirect("/meals");
+  const today = new Date().toISOString().split('T')[0];
+  redirect(`/meals/${today}`);
 }
+
 
 export async function updateMeal(id: string, name: string, protein: number, carbs: number, fat: number) {
   const user = auth();
@@ -166,7 +174,8 @@ export async function updateMeal(id: string, name: string, protein: number, carb
     },
   });
 
-  redirect(`/meals`);
+  const today = new Date().toISOString().split('T')[0];
+  redirect(`/meals/${today}`);
 }
 
 export async function getMealsByDate(date: string) {
