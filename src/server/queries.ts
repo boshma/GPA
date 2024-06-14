@@ -76,7 +76,12 @@ export async function addMeal(name: string, protein: number, carbs: number, fat:
   if (!user.userId) throw new Error("Not authenticated");
 
   const date = new Date().toISOString().split('T')[0];
-  const now = new Date().toISOString(); 
+  const now = new Date().toISOString();
+
+  // Round values to 2 decimal places
+  protein = parseFloat(protein.toFixed(2));
+  carbs = parseFloat(carbs.toFixed(2));
+  fat = parseFloat(fat.toFixed(2));
 
   await db.insert(foodEntries).values({
       name: sql`${name}`,
@@ -102,6 +107,7 @@ export async function addMeal(name: string, protein: number, carbs: number, fat:
 
   redirect(`/meals/${date}`);
 }
+
 
 export async function getMealById(id: string) {
   const user = auth();

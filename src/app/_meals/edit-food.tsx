@@ -1,3 +1,4 @@
+//src/app/_meals/edit-food.tsx
 import { clerkClient } from "@clerk/nextjs/server";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -35,19 +36,19 @@ export async function EditMealForm(props: { mealId: string }) {
           <div className="mb-2">
             <label>
               <strong>Protein (g):</strong>
-              <Input type="number" name="protein" defaultValue={meal.protein} required />
+              <Input type="number" name="protein" step="0.01" defaultValue={meal.protein} required />
             </label>
           </div>
           <div className="mb-2">
             <label>
               <strong>Carbs (g):</strong>
-              <Input type="number" name="carbs" defaultValue={meal.carbs} required />
+              <Input type="number" name="carbs" step="0.01" defaultValue={meal.carbs} required />
             </label>
           </div>
           <div className="mb-2">
             <label>
               <strong>Fats (g):</strong>
-              <Input type="number" name="fat" defaultValue={meal.fat} required />
+              <Input type="number" name="fat" step="0.01" defaultValue={meal.fat} required />
             </label>
           </div>
           <Button type="submit" variant="default">
