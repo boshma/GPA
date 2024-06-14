@@ -3,13 +3,16 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { Calendar } from "~/components/ui/calendar";
 
 export function MealsTopNav() {
   const params = useParams();
   const dateParam = params?.date;
+  const router = useRouter();
 
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [isCalendarVisible, setIsCalendarVisible] = useState(false);
 
   useEffect(() => {
     if (dateParam) {
@@ -33,8 +36,17 @@ export function MealsTopNav() {
     return nextDay;
   };
 
+  const handleDayClick = (date: Date) => {
+    router.push(`/meals/${formatDate(date)}`);
+    setIsCalendarVisible(false); // Hide calendar after selecting a date
+  };
+
+  const toggleCalendarVisibility = () => {
+    setIsCalendarVisible(!isCalendarVisible);
+  };
+
   return (
-    <nav className="flex w-full items-center justify-between border-b p-4">
+    <nav className="relative flex w-full items-center justify-between border-b p-4">
       <div>
         <Link href="/addMeal">Add Meal</Link>
       </div>
@@ -42,11 +54,18 @@ export function MealsTopNav() {
         <Link href={`/meals/${formatDate(getPreviousDay(currentDate))}`}>
           Yesterday
         </Link>
-        <span>{formatDate(currentDate)}</span>
+        <span onClick={toggleCalendarVisibility} style={{ cursor: "pointer" }}>
+          {formatDate(currentDate)}
+        </span>
         <Link href={`/meals/${formatDate(getNextDay(currentDate))}`}>
           Tomorrow
         </Link>
       </div>
+      {isCalendarVisible && (
+        <div className="absolute top-full mt-2 left-1/2 transform -translate-x-1/2 bg-black z-10 shadow-lg border rounded">
+          <Calendar onDayClick={handleDayClick} />
+        </div>
+      )}
     </nav>
   );
 }
