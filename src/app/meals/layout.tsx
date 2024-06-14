@@ -2,6 +2,7 @@
 import "~/styles/globals.css";
 import { MealsTopNav } from "../_components/mealstopnav";
 import { SignedIn } from "@clerk/nextjs";
+import { S } from "node_modules/@upstash/redis/zmscore-22fd48c7";
 
 export default function Layout({
   children,
@@ -10,13 +11,16 @@ export default function Layout({
   modal: React.ReactNode;
 }) {
   return (
-    <SignedIn>
+
       <div className="h-screen grid grid-rows-[auto,1fr]">
+        <SignedIn>
 
         <MealsTopNav />
 
-        <main className="overflow-y-scroll">{children}</main>
+        </SignedIn>
+
+        <main className="">{children}</main>
       </div>
-    </SignedIn>
+
   );
 }
