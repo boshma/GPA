@@ -10,11 +10,13 @@ export default function Layout({
   modal: React.ReactNode;
 }) {
   return (
-    <div className="h-screen grid grid-rows-[auto,1fr]">
-      <SignedIn>
-      <MealsTopNav />
-      </SignedIn>
-      <main className="overflow-y-scroll">{children}</main>
-    </div>
+    <SignedIn>
+      <div className="h-screen grid grid-rows-[auto,1fr]">
+
+        <MealsTopNav />
+
+        <main className="overflow-y-scroll">{children}</main>
+      </div>
+    </SignedIn>
   );
 }
