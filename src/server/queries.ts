@@ -1,3 +1,4 @@
+//src/server/queries.ts (server actions)
 import "server-only";
 import { db } from "./db";
 import { auth } from "@clerk/nextjs/server";
@@ -166,4 +167,17 @@ export async function updateMeal(id: string, name: string, protein: number, carb
   });
 
   redirect(`/meals`);
+}
+
+export async function getMealsByDate(date: string) {
+  const user = auth();
+
+  if (!user.userId) throw new Error("Not authenticated");
+
+  const meals = await db.query.foodEntries.findMany({
+    where: (model, { eq }) => eq(model.date, date),
+    orderBy: (model, { desc }) => desc(model.date),
+  });
+  
+  return meals;
 }
