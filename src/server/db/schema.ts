@@ -49,7 +49,6 @@ export const foodEntries = createTable(
     userIdDateIndex: index("user_id_date_idx").on(foodEntry.userId, foodEntry.date),
   })
 );
-
 export const exercises = createTable(
   "exercise",
   {
@@ -70,6 +69,7 @@ export const exercises = createTable(
     userIdIndex: index("exercise_user_id_idx").on(exercise.userId), 
   })
 );
+
 export const sets = createTable(
   "set",
   {
@@ -78,7 +78,6 @@ export const sets = createTable(
       .references(() => exercises.id, { onDelete: "cascade" }),
     repetitions: integer("repetitions").notNull(),
     weight: doublePrecision("weight").notNull(),
-
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),

@@ -3,7 +3,7 @@ import "server-only";
 import { db } from "./db";
 import { auth } from "@clerk/nextjs/server";
 import { and, eq, sql } from "drizzle-orm";
-import { foodEntries, images } from "./db/schema";
+import { exercises, foodEntries, images, sets } from "./db/schema";
 import { redirect } from "next/navigation";
 import analyticsServerClient from "./analytics";
 import moment from "moment-timezone";
@@ -206,4 +206,54 @@ export async function getMealsByDate(date: string) {
   });
 
   return meals;
+}
+
+
+
+
+export async function addExercise(name: string, description: string, setsData: { repetitions: number, weight: number }[]) {
+  const user = auth();
+  if (!user.userId) throw new Error("Not authenticated");
+
+  // Get current date and time in Pacific Time Zone
+  const now = moment().tz("America/Los_Angeles");
+  const date = now.format("YYYY-MM-DD");
+  const nowISO = now.toISOString();
+
+  const insertedExercise = await db.insert(exercises).values({
+    name: sql`${name}`,
+    description: sql`${description}`,
+    userId: sql`${user.userId}`,
+    date: sql`${date}`,
+    createdAt: sql`${nowISO}`,
+    updatedAt: sql`${nowISO}`,
+  }).returning({ id: exercises.id });
+
+  // Handle the possibility that insertedExercise might be empty or undefined
+  const exerciseId = insertedExercise[0]?.id;
+  if (!exerciseId) {
+    throw new Error("Failed to insert exercise or exercise ID is undefined");
+  }
+
+  for (const setData of setsData) {
+    await db.insert(sets).values({
+      exerciseId: sql`${exerciseId}`,
+      repetitions: sql`${setData.repetitions}`,
+      weight: sql`${setData.weight}`,
+      createdAt: sql`${nowISO}`,
+      updatedAt: sql`${nowISO}`,
+    });
+  }
+
+  analyticsServerClient.capture({
+    distinctId: user.userId,
+    event: "add exercise",
+    properties: {
+      name,
+      description,
+      sets: setsData,
+    },
+  });
+
+  redirect(`/workouts/${date}`);
 }
