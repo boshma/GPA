@@ -6,6 +6,7 @@ import { and, eq, sql } from "drizzle-orm";
 import { foodEntries, images } from "./db/schema";
 import { redirect } from "next/navigation";
 import analyticsServerClient from "./analytics";
+import moment from "moment-timezone";
 
 export async function getMyImages() {
 
@@ -59,55 +60,65 @@ export async function deleteImage(id: number) {
 
   export async function getMyMeals() {
     const user = auth();
-
+  
     if (!user.userId) throw new Error("Not authenticated");
-
+  
     const meals = await db.query.foodEntries.findMany({
         where: (model, { eq }) => eq(model.userId, user.userId),
         orderBy: (model, { desc }) => desc(model.date),
     });
-    return meals;
-}
+  
+    // Convert all meal dates to Pacific Time before returning
+    const mealsWithPacificTime = meals.map(meal => ({
+      ...meal,
+      date: moment(meal.date).tz("America/Los_Angeles").format("YYYY-MM-DD"),
+      createdAt: moment(meal.createdAt).tz("America/Los_Angeles").toISOString(),
+      updatedAt: moment(meal.updatedAt).tz("America/Los_Angeles").toISOString(),
+    }));
+  
+    return mealsWithPacificTime;
+  }
 
 
 
-export async function addMeal(name: string, protein: number, carbs: number, fat: number) {
-  const user = auth();
-  if (!user.userId) throw new Error("Not authenticated");
-
-  const date = new Date().toISOString().split('T')[0];
-  const now = new Date().toISOString();
-
-  // Round values to 2 decimal places
-  protein = parseFloat(protein.toFixed(2));
-  carbs = parseFloat(carbs.toFixed(2));
-  fat = parseFloat(fat.toFixed(2));
-
-  await db.insert(foodEntries).values({
-      name: sql`${name}`,
-      protein: sql`${protein}`,
-      carbs: sql`${carbs}`,
-      fat: sql`${fat}`,
-      userId: sql`${user.userId}`,
-      date: sql`${date}`,
-      createdAt: sql`${now}`,
-      updatedAt: sql`${now}`,
-  });
-
-  analyticsServerClient.capture({
-      distinctId: user.userId,
-      event: "add meal",
-      properties: {
-          name,
-          protein,
-          carbs,
-          fat,
-      },
-  });
-
-  redirect(`/meals/${date}`);
-}
-
+  export async function addMeal(name: string, protein: number, carbs: number, fat: number) {
+    const user = auth();
+    if (!user.userId) throw new Error("Not authenticated");
+  
+    // Get current date and time in Pacific Time Zone
+    const now = moment().tz("America/Los_Angeles");
+    const date = now.format("YYYY-MM-DD");
+    const nowISO = now.toISOString();
+  
+    // Round values to 2 decimal places
+    protein = parseFloat(protein.toFixed(2));
+    carbs = parseFloat(carbs.toFixed(2));
+    fat = parseFloat(fat.toFixed(2));
+  
+    await db.insert(foodEntries).values({
+        name: sql`${name}`,
+        protein: sql`${protein}`,
+        carbs: sql`${carbs}`,
+        fat: sql`${fat}`,
+        userId: sql`${user.userId}`,
+        date: sql`${date}`,
+        createdAt: sql`${nowISO}`,
+        updatedAt: sql`${nowISO}`,
+    });
+  
+    analyticsServerClient.capture({
+        distinctId: user.userId,
+        event: "add meal",
+        properties: {
+            name,
+            protein,
+            carbs,
+            fat,
+        },
+    });
+  
+    redirect(`/meals/${date}`);
+  }
 
 export async function getMealById(id: string) {
   const user = auth();
@@ -147,7 +158,7 @@ export async function deleteMeal(id: string) {
     },
   });
 
-  const today = new Date().toISOString().split('T')[0];
+  const today = moment().tz("America/Los_Angeles").format("YYYY-MM-DD");
   redirect(`/meals/${today}`);
 }
 
@@ -180,7 +191,7 @@ export async function updateMeal(id: string, name: string, protein: number, carb
     },
   });
 
-  const today = new Date().toISOString().split('T')[0];
+  const today = moment().tz("America/Los_Angeles").format("YYYY-MM-DD");
   redirect(`/meals/${today}`);
 }
 
