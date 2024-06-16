@@ -16,6 +16,7 @@ export function TopNav() {
       <div className="flex flex-row gap-4 items-center">
         <Link href="/images">Images</Link>
         <Link href={`/meals/${today}`}>Meals</Link>
+        <Link href={`/exercises/${today}`}>Exercises</Link>
         <SignedOut>
           <SignInButton />
         </SignedOut>

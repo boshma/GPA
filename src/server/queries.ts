@@ -210,8 +210,7 @@ export async function getMealsByDate(date: string) {
 
 
 
-
-export async function addExercise(name: string, description: string, setsData: { repetitions: number, weight: number }[]) {
+export async function addExercise(name: string, setCount: number) {
   const user = auth();
   if (!user.userId) throw new Error("Not authenticated");
 
@@ -222,24 +221,22 @@ export async function addExercise(name: string, description: string, setsData: {
 
   const insertedExercise = await db.insert(exercises).values({
     name: sql`${name}`,
-    description: sql`${description}`,
     userId: sql`${user.userId}`,
     date: sql`${date}`,
     createdAt: sql`${nowISO}`,
     updatedAt: sql`${nowISO}`,
   }).returning({ id: exercises.id });
 
-  // Handle the possibility that insertedExercise might be empty or undefined
   const exerciseId = insertedExercise[0]?.id;
   if (!exerciseId) {
     throw new Error("Failed to insert exercise or exercise ID is undefined");
   }
 
-  for (const setData of setsData) {
+  for (let i = 0; i < setCount; i++) {
     await db.insert(sets).values({
       exerciseId: sql`${exerciseId}`,
-      repetitions: sql`${setData.repetitions}`,
-      weight: sql`${setData.weight}`,
+      repetitions: sql`0`, // Set repetitions to 0
+      weight: sql`0`,      // Set weight to 0
       createdAt: sql`${nowISO}`,
       updatedAt: sql`${nowISO}`,
     });
@@ -250,10 +247,25 @@ export async function addExercise(name: string, description: string, setsData: {
     event: "add exercise",
     properties: {
       name,
-      description,
-      sets: setsData,
+      setCount,
     },
   });
 
-  redirect(`/workouts/${date}`);
+  redirect(`/exercises/${date}`);
+}
+
+export async function getExercisesByDate(date: string) {
+  const user = auth();
+
+  if (!user.userId) throw new Error("Not authenticated");
+
+  const exercisesWithSets = await db.query.exercises.findMany({
+    where: (model, { and, eq }) => and(eq(model.date, date), eq(model.userId, user.userId)),
+    orderBy: (model, { desc }) => desc(model.createdAt),
+    with: {
+      sets: true,
+    },
+  });
+
+  return exercisesWithSets;
 }
