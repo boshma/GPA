@@ -54,7 +54,6 @@ export const exercises = createTable(
   {
     id: serial("id").primaryKey(),
     name: varchar("name", { length: 256 }).notNull(),
-    description: varchar("description", { length: 1024 }),
     userId: varchar("user_id", { length: 256 }).notNull(),
     date: date("date").notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })
