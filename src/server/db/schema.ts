@@ -1,3 +1,4 @@
+//src/server/db/schema.ts (database schema, drizzle orm)
 import { sql } from "drizzle-orm";
 import {
   serial,
@@ -64,8 +65,8 @@ export const exercises = createTable(
       .notNull(),
   },
   (exercise) => ({
-    nameIndex: index("exercise_name_idx").on(exercise.name), 
-    userIdIndex: index("exercise_user_id_idx").on(exercise.userId), 
+    nameIndex: index("exercise_name_idx").on(exercise.name),
+    userIdIndex: index("exercise_user_id_idx").on(exercise.userId),
   })
 );
 
@@ -85,6 +86,6 @@ export const sets = createTable(
       .notNull(),
   },
   (set) => ({
-    exerciseIdIndex: index("set_exercise_id_idx").on(set.exerciseId), 
+    exerciseIdIndex: index("set_exercise_id_idx").on(set.exerciseId),
   })
 );

@@ -1,56 +1,50 @@
-//src/app/_workouts/exercise-table.tsx
+// src/app/_workouts/exercise-table.tsx
 import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableFooter,
-    TableHead,
-    TableHeader,
-    TableRow,
-  } from "~/components/ui/table";
-  
-  interface Set {
-    id: number;
-    repetitions: number;
-    weight: number;
-  }
-  
-  interface Exercise {
-    id: number;
-    name: string;
-    sets: Set[];
-  }
-  
-  interface ExerciseTableProps {
-    exercises: Exercise[];
-  }
-  
-  export default function ExerciseTable({ exercises }: ExerciseTableProps) {
-    return (
-      <>
-        {exercises.map((exercise) => (
-          <Table key={exercise.id}>
-            <TableCaption>{exercise.name}</TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Set #</TableHead>
-                <TableHead>Repetitions</TableHead>
-                <TableHead>Weight</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {exercise.sets.map((set, index) => (
-                <TableRow key={set.id}>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>{set.repetitions}</TableCell>
-                  <TableCell>{set.weight}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        ))}
-      </>
-    );
-  }
-  
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "~/components/ui/table";
+import { Exercise } from "~/server/types";
+
+interface ExerciseTableProps {
+  exercise: Exercise;
+}
+
+export default function ExerciseTable() {
+  return (
+    <Table>
+    <TableCaption>Sets for a given exercise</TableCaption>
+    <TableHeader>
+      <TableRow>
+        <TableHead className="w-[100px]">Set 1</TableHead>
+        <TableHead>Set 2</TableHead>
+        <TableHead>Set 3</TableHead>
+        <TableHead>Set 4</TableHead>
+        <TableHead>Set 5</TableHead>
+      </TableRow>
+    </TableHeader>
+    <TableBody>
+ 
+        <TableRow>
+          <TableCell className="font-medium">
+          
+          </TableCell>
+          <TableCell></TableCell>
+          <TableCell></TableCell>
+          <TableCell></TableCell>
+          <TableCell>
+    
+          </TableCell>
+        </TableRow>
+    </TableBody>
+    <TableFooter>
+
+    </TableFooter>
+  </Table>
+  );
+}

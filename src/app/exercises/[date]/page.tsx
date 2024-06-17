@@ -3,12 +3,15 @@ import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { getExercisesByDate } from "~/server/queries";
 import ExerciseTable from "~/app/_workouts/exercise-table";
+import { Exercise } from "~/server/types";
+
+interface ExercisesByDatePageProps {
+  params: { date: string };
+}
 
 export default async function ExercisesByDatePage({
   params: { date },
-}: {
-  params: { date: string };
-}) {
+}: ExercisesByDatePageProps) {
   const { userId } = auth();
 
   if (!userId) {
@@ -25,12 +28,24 @@ export default async function ExercisesByDatePage({
   }
 
   // User is logged in, call the server action
-  const exercises = await getExercisesByDate(date);
+  const exercise: Exercise[] | null = await getExercisesByDate(date);
+
+  if (!exercise) {
+    return (
+      <main>
+        <SignedIn>
+          <div className="h-full w-full text-center text-2xl">
+            No exercises found for this date
+          </div>
+        </SignedIn>
+      </main>
+    );
+  }
 
   return (
     <main>
       <SignedIn>
-        <ExerciseTable exercises={exercises} />
+        <ExerciseTable/>
       </SignedIn>
     </main>
   );

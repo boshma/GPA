@@ -7,6 +7,8 @@ import { exercises, foodEntries, images, sets } from "./db/schema";
 import { redirect } from "next/navigation";
 import analyticsServerClient from "./analytics";
 import moment from "moment-timezone";
+import { Exercise, Set } from "./types";
+
 
 export async function getMyImages() {
 
@@ -252,20 +254,55 @@ export async function addExercise(name: string, setCount: number) {
   });
 
   redirect(`/exercises/${date}`);
-}
 
-export async function getExercisesByDate(date: string) {
+  
+}
+export async function getExercisesByDate(date: string): Promise<Exercise[]> {
   const user = auth();
 
   if (!user.userId) throw new Error("Not authenticated");
 
-  const exercisesWithSets = await db.query.exercises.findMany({
-    where: (model, { and, eq }) => and(eq(model.date, date), eq(model.userId, user.userId)),
-    orderBy: (model, { desc }) => desc(model.createdAt),
-    with: {
-      sets: true,
-    },
+  // Convert date to Pacific Time Zone
+  const dateInPT = moment(date).tz("America/Los_Angeles").format("YYYY-MM-DD");
+
+  // Query exercises by date for the logged-in user
+  const exerciseRecords = await db.query.exercises.findMany({
+    where: (model, { and, eq }) => and(eq(model.date, dateInPT), eq(model.userId, user.userId)),
+    orderBy: (model, { asc }) => asc(model.id),
   });
 
-  return exercisesWithSets;
+  if (exerciseRecords.length === 0) {
+    return [];
+  }
+
+  const exerciseIds = exerciseRecords.map(exercise => exercise.id);
+
+  // Query sets for the exercises found
+  const setRecords = await db.query.sets.findMany({
+    where: (model, { inArray }) => inArray(model.exerciseId, exerciseIds),
+  });
+
+  // Group sets under their respective exercises
+  const exerciseMap = new Map<number, Exercise>();
+  for (const exercise of exerciseRecords) {
+    exerciseMap.set(exercise.id, {
+      id: exercise.id,
+      name: exercise.name,
+      date: exercise.date,
+      sets: [],
+    });
+  }
+
+  for (const set of setRecords) {
+    const exercise = exerciseMap.get(set.exerciseId);
+    if (exercise) {
+      exercise.sets.push({
+        id: set.id,
+        repetitions: set.repetitions,
+        weight: set.weight,
+      });
+    }
+  }
+
+  return Array.from(exerciseMap.values());
 }
