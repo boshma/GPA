@@ -5,6 +5,7 @@ import { getExercisesByDate } from "~/server/queries";
 import ExerciseTable from "~/app/_workouts/exercise-table";
 import { Exercise } from "~/server/types";
 import Link from "next/link";
+import moment from "moment-timezone";
 
 interface ExercisesByDatePageProps {
   params: { date: string };
@@ -16,7 +17,6 @@ export default async function ExercisesByDatePage({
   const { userId } = auth();
 
   if (!userId) {
-    // User is not logged in, return early with SignedOut component
     return (
       <main>
         <SignedOut>
@@ -28,8 +28,11 @@ export default async function ExercisesByDatePage({
     );
   }
 
-  // User is logged in, call the server action
-  const exercises: Exercise[] | null = await getExercisesByDate(date);
+  // Ensure the date is interpreted in Pacific Time Zone
+  const dateInPT = moment(date).tz("America/Los_Angeles").format("YYYY-MM-DD");
+
+  // Fetch exercises for the given date
+  const exercises: Exercise[] | null = await getExercisesByDate(dateInPT);
 
   if (!exercises || exercises.length === 0) {
     return (
@@ -44,14 +47,12 @@ export default async function ExercisesByDatePage({
     );
   }
 
-  // Create an exercise table for each exercise on that given day
   return (
     <main>
       <SignedIn>
         {exercises.map((exercise) => (
           <ExerciseTable key={exercise.id} exercise={exercise} />
         ))}
-
         <Link href="/addExercise">Add Exercise</Link>
       </SignedIn>
     </main>
