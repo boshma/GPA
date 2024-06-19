@@ -4,6 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 import { getExercisesByDate } from "~/server/queries";
 import ExerciseTable from "~/app/_workouts/exercise-table";
 import { Exercise } from "~/server/types";
+import Link from "next/link";
 
 interface ExercisesByDatePageProps {
   params: { date: string };
@@ -49,6 +50,8 @@ export default async function ExercisesByDatePage({
         {exercises.map((exercise) => (
           <ExerciseTable key={exercise.id} exercise={exercise} />
         ))}
+
+        <Link href="/addExercise">Add Meal</Link>
       </SignedIn>
     </main>
   );
