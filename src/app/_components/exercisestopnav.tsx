@@ -1,11 +1,11 @@
 //src/app/_components/exercisestopnav.tsx
-
 "use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { Calendar } from "~/components/ui/calendar";
+import moment from "moment-timezone";
 
 export function ExercisesTopNav() {
   const params = useParams();
@@ -17,13 +17,13 @@ export function ExercisesTopNav() {
 
   useEffect(() => {
     if (dateParam) {
-      setCurrentDate(new Date(dateParam as string));
+      setCurrentDate(moment(dateParam as string).tz("America/Los_Angeles").toDate());
     } else {
-      setCurrentDate(new Date());
+      setCurrentDate(moment().tz("America/Los_Angeles").toDate());
     }
   }, [dateParam]);
 
-  const formatDate = (date: Date) => date.toISOString().split('T')[0];
+  const formatDate = (date: Date) => moment(date).tz("America/Los_Angeles").format("YYYY-MM-DD");
 
   const handleDayClick = (date: Date) => {
     router.push(`/exercises/${formatDate(date)}`);
