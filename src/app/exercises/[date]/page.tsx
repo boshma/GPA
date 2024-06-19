@@ -28,9 +28,9 @@ export default async function ExercisesByDatePage({
   }
 
   // User is logged in, call the server action
-  const exercise: Exercise[] | null = await getExercisesByDate(date);
+  const exercises: Exercise[] | null = await getExercisesByDate(date);
 
-  if (!exercise) {
+  if (!exercises || exercises.length === 0) {
     return (
       <main>
         <SignedIn>
@@ -42,10 +42,13 @@ export default async function ExercisesByDatePage({
     );
   }
 
+  // Create an exercise table for each exercise on that given day
   return (
     <main>
       <SignedIn>
-        <ExerciseTable/>
+        {exercises.map((exercise) => (
+          <ExerciseTable key={exercise.id} exercise={exercise} />
+        ))}
       </SignedIn>
     </main>
   );

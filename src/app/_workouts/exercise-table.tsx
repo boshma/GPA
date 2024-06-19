@@ -15,36 +15,26 @@ interface ExerciseTableProps {
   exercise: Exercise;
 }
 
-export default function ExerciseTable() {
+export default function ExerciseTable({ exercise }: ExerciseTableProps) {
   return (
     <Table>
-    <TableCaption>Sets for a given exercise</TableCaption>
-    <TableHeader>
-      <TableRow>
-        <TableHead className="w-[100px]">Set 1</TableHead>
-        <TableHead>Set 2</TableHead>
-        <TableHead>Set 3</TableHead>
-        <TableHead>Set 4</TableHead>
-        <TableHead>Set 5</TableHead>
-      </TableRow>
-    </TableHeader>
-    <TableBody>
- 
+      <TableCaption>{exercise.name}</TableCaption>
+      <TableHeader>
         <TableRow>
-          <TableCell className="font-medium">
-          
-          </TableCell>
-          <TableCell></TableCell>
-          <TableCell></TableCell>
-          <TableCell></TableCell>
-          <TableCell>
-    
-          </TableCell>
+          {exercise.sets.map((_, index) => (
+            <TableHead key={index}>Set {index + 1}</TableHead>
+          ))}
         </TableRow>
-    </TableBody>
-    <TableFooter>
-
-    </TableFooter>
-  </Table>
+      </TableHeader>
+      <TableBody>
+        <TableRow>
+          {exercise.sets.map((set, index) => (
+            <TableCell key={index}>
+              {set.repetitions}x{set.weight}
+            </TableCell>
+          ))}
+        </TableRow>
+      </TableBody>
+    </Table>
   );
 }
