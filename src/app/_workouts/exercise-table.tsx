@@ -15,22 +15,26 @@ import { Exercise } from "~/server/types";
 interface ExerciseTableProps {
   exercise: Exercise;
 }
+
 export default function ExerciseTable({ exercise }: ExerciseTableProps) {
+  // Sort sets by ID
+  const sortedSets = [...exercise.sets].sort((a, b) => a.id - b.id);
+
   return (
     <Table>
       <TableCaption>
-        <Link href={`/exercise/${exercise.id}`} >{exercise.name}</Link>
+        <Link href={`/exercise/${exercise.id}`}>{exercise.name}</Link>
       </TableCaption>
       <TableHeader>
         <TableRow>
-          {exercise.sets.map((_, index) => (
+          {sortedSets.map((_, index) => (
             <TableHead key={index}>Set {index + 1}</TableHead>
           ))}
         </TableRow>
       </TableHeader>
       <TableBody>
         <TableRow>
-          {exercise.sets.map((set, index) => (
+          {sortedSets.map((set, index) => (
             <TableCell key={index}>
               <Link href={`/set/${set.id}`}>
                 {set.repetitions}x{set.weight}
