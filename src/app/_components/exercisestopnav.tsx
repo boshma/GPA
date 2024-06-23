@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { Calendar } from "~/components/ui/calendar";
-import moment from "moment-timezone";
 
 export function ExercisesTopNav() {
   const params = useParams();
@@ -23,7 +22,7 @@ export function ExercisesTopNav() {
     }
   }, [dateParam]);
 
-  const formatDate = (date: Date) => moment(date).tz("America/Los_Angeles").format("YYYY-MM-DD");
+  const formatDate = (date: Date) => date.toISOString().split('T')[0];
 
   const handleDayClick = (date: Date) => {
     router.push(`/exercises/${formatDate(date)}`);

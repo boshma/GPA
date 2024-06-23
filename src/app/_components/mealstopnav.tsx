@@ -26,7 +26,7 @@ export function MealsTopNav() {
 
   const handleDayClick = (date: Date) => {
     router.push(`/meals/${formatDate(date)}`);
-    setIsCalendarVisible(false); // Hide calendar after selecting a date
+    setIsCalendarVisible(false); 
   };
 
   const toggleCalendarVisibility = () => {
