@@ -1,3 +1,4 @@
+//src/app/_analytics/provider.tsx
 "use client";
 import { useAuth, useUser } from "@clerk/nextjs";
 import posthog from "posthog-js";

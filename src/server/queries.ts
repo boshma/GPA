@@ -250,16 +250,15 @@ export async function addExercise(name: string, setCount: number) {
     properties: {
       name,
       setCount,
+      date,
     },
   });
 
   redirect(`/exercises/${date}`);
-
-  
 }
+
 export async function getExercisesByDate(date: string): Promise<Exercise[]> {
   const user = auth();
-
   if (!user.userId) throw new Error("Not authenticated");
 
   // Convert date to Pacific Time Zone
@@ -272,6 +271,14 @@ export async function getExercisesByDate(date: string): Promise<Exercise[]> {
   });
 
   if (exerciseRecords.length === 0) {
+    analyticsServerClient.capture({
+      distinctId: user.userId,
+      event: "get exercises by date",
+      properties: {
+        date: dateInPT,
+        count: 0,
+      },
+    });
     return [];
   }
 
@@ -303,6 +310,15 @@ export async function getExercisesByDate(date: string): Promise<Exercise[]> {
       });
     }
   }
+
+  analyticsServerClient.capture({
+    distinctId: user.userId,
+    event: "get exercises by date",
+    properties: {
+      date: dateInPT,
+      count: exerciseRecords.length,
+    },
+  });
 
   return Array.from(exerciseMap.values());
 }

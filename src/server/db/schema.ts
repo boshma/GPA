@@ -27,7 +27,7 @@ export const images = createTable(
     updatedAt: timestamp("updated_at", { withTimezone: true }),
   },
   (image) => ({
-    nameIndex: index("image_name_idx").on(image.name), // Updated index name
+    nameIndex: index("image_name_idx").on(image.name),
   })
 );
 
