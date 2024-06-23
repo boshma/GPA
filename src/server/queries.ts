@@ -261,12 +261,9 @@ export async function getExercisesByDate(date: string): Promise<Exercise[]> {
   const user = auth();
   if (!user.userId) throw new Error("Not authenticated");
 
-  // Convert date to Pacific Time Zone
-  const dateInPT = moment(date).tz("America/Los_Angeles").format("YYYY-MM-DD");
-
   // Query exercises by date for the logged-in user
   const exerciseRecords = await db.query.exercises.findMany({
-    where: (model, { and, eq }) => and(eq(model.date, dateInPT), eq(model.userId, user.userId)),
+    where: (model, { and, eq }) => and(eq(model.date, date), eq(model.userId, user.userId)),
     orderBy: (model, { asc }) => asc(model.id),
   });
 
@@ -275,7 +272,7 @@ export async function getExercisesByDate(date: string): Promise<Exercise[]> {
       distinctId: user.userId,
       event: "get exercises by date",
       properties: {
-        date: dateInPT,
+        date: date,
         count: 0,
       },
     });
@@ -315,7 +312,7 @@ export async function getExercisesByDate(date: string): Promise<Exercise[]> {
     distinctId: user.userId,
     event: "get exercises by date",
     properties: {
-      date: dateInPT,
+      date: date,
       count: exerciseRecords.length,
     },
   });
