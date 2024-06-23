@@ -319,3 +319,72 @@ export async function getExercisesByDate(date: string): Promise<Exercise[]> {
 
   return Array.from(exerciseMap.values());
 }
+
+
+export async function getExerciseById(id: number) {
+  const user = auth();
+
+  if (!user.userId) throw new Error("Not authenticated");
+
+  const exercise = await db.query.exercises.findFirst({
+    where: (model, { eq }) => eq(model.id, id),
+  });
+
+  if (!exercise) throw new Error("Exercise not found");
+
+  if (exercise.userId !== user.userId) throw new Error("Not authorized");
+
+  return exercise;
+}
+
+export async function updateExercise(id: number, name: string) {
+  const user = auth();
+  if (!user.userId) throw new Error("Not authenticated");
+
+  const now = new Date().toISOString();
+
+  await db.update(exercises)
+    .set({
+      name: sql`${name}`,
+      updatedAt: sql`${now}`
+    })
+    .where(and(eq(exercises.id, id), eq(exercises.userId, user.userId)));
+
+  analyticsServerClient.capture({
+    distinctId: user.userId,
+    event: "update exercise",
+    properties: {
+      exerciseId: id,
+      name,
+    },
+  });
+
+  const today = moment().tz("America/Los_Angeles").format("YYYY-MM-DD");
+  redirect(`/exercises/${today}`);
+}
+
+export async function deleteExercise(id: number) {
+  const user = auth();
+  if (!user.userId) throw new Error("Unauthorized");
+
+  const exercise = await db.query.exercises.findFirst({
+    where: (model, { eq }) => eq(model.id, id),
+  });
+
+  if (!exercise) throw new Error("Exercise not found");
+  if (exercise.userId !== user.userId) throw new Error("Not authorized");
+
+  await db.delete(exercises)
+    .where(and(eq(exercises.id, id), eq(exercises.userId, user.userId)));
+
+  analyticsServerClient.capture({
+    distinctId: user.userId,
+    event: "delete exercise",
+    properties: {
+      exerciseId: id,
+    },
+  });
+
+  const today = moment().tz("America/Los_Angeles").format("YYYY-MM-DD");
+  redirect(`/exercises/${today}`);
+}

@@ -1,4 +1,5 @@
 // src/app/_workouts/exercise-table.tsx
+import Link from "next/link";
 import {
   Table,
   TableBody,
@@ -14,11 +15,12 @@ import { Exercise } from "~/server/types";
 interface ExerciseTableProps {
   exercise: Exercise;
 }
-
 export default function ExerciseTable({ exercise }: ExerciseTableProps) {
   return (
     <Table>
-      <TableCaption>{exercise.name}</TableCaption>
+      <TableCaption>
+        <Link href={`/exercise/${exercise.id}`} >{exercise.name}</Link>
+        </TableCaption>
       <TableHeader>
         <TableRow>
           {exercise.sets.map((_, index) => (
