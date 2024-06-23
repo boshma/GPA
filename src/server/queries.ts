@@ -388,3 +388,60 @@ export async function deleteExercise(id: number) {
   const today = moment().tz("America/Los_Angeles").format("YYYY-MM-DD");
   redirect(`/exercises/${today}`);
 }
+
+export async function getSetById(id: number) {
+  const set = await db.query.sets.findFirst({
+    where: (model, { eq }) => eq(model.id, id),
+  });
+
+  if (!set) throw new Error("Set not found");
+
+  return set;
+}
+
+export async function updateSet(id: number, repetitions: number, weight: number) {
+  const user = auth();
+  if (!user.userId) throw new Error("Not authenticated");
+
+  const now = new Date().toISOString(); // Get current timestamp for updatedAt
+
+  await db.update(sets)
+    .set({
+      repetitions: sql`${repetitions}`,
+      weight: sql`${weight}`,
+      updatedAt: sql`${now}`
+    })
+    .where(eq(sets.id, id));
+
+  analyticsServerClient.capture({
+    distinctId: user.userId,
+    event: "update set",
+    properties: {
+      setId: id,
+      repetitions,
+      weight,
+    },
+  });
+
+  const today = moment().tz("America/Los_Angeles").format("YYYY-MM-DD");
+  redirect(`/exercises/${today}`);
+}
+
+export async function deleteSet(id: number) {
+  const user = auth();
+  if (!user.userId) throw new Error("Not authenticated");
+
+  await db.delete(sets)
+    .where(eq(sets.id, id));
+
+  analyticsServerClient.capture({
+    distinctId: user.userId,
+    event: "delete set",
+    properties: {
+      setId: id,
+    },
+  });
+
+  const today = moment().tz("America/Los_Angeles").format("YYYY-MM-DD");
+  redirect(`/exercises/${today}`);
+}

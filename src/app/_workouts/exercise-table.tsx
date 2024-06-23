@@ -20,7 +20,7 @@ export default function ExerciseTable({ exercise }: ExerciseTableProps) {
     <Table>
       <TableCaption>
         <Link href={`/exercise/${exercise.id}`} >{exercise.name}</Link>
-        </TableCaption>
+      </TableCaption>
       <TableHeader>
         <TableRow>
           {exercise.sets.map((_, index) => (
@@ -32,7 +32,9 @@ export default function ExerciseTable({ exercise }: ExerciseTableProps) {
         <TableRow>
           {exercise.sets.map((set, index) => (
             <TableCell key={index}>
-              {set.repetitions}x{set.weight}
+              <Link href={`/set/${set.id}`}>
+                {set.repetitions}x{set.weight}
+              </Link>
             </TableCell>
           ))}
         </TableRow>
