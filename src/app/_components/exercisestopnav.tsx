@@ -17,9 +17,9 @@ export function ExercisesTopNav() {
 
   useEffect(() => {
     if (dateParam) {
-      setCurrentDate(moment(dateParam as string).tz("America/Los_Angeles").toDate());
+      setCurrentDate(new Date(dateParam as string));
     } else {
-      setCurrentDate(moment().tz("America/Los_Angeles").toDate());
+      setCurrentDate(new Date());
     }
   }, [dateParam]);
 
