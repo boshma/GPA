@@ -28,11 +28,9 @@ export default async function ExercisesByDatePage({
     );
   }
 
-  // Ensure the date is interpreted in Pacific Time Zone
-  const dateInPT = moment(date).tz("America/Los_Angeles").format("YYYY-MM-DD");
 
   // Fetch exercises for the given date
-  const exercises: Exercise[] | null = await getExercisesByDate(dateInPT);
+  const exercises: Exercise[] | null = await getExercisesByDate(date);
 
   if (!exercises || exercises.length === 0) {
     return (
