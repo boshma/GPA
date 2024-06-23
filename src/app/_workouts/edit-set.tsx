@@ -30,7 +30,7 @@ export async function EditSetForm(props: { setId: string }) {
           </div>
           <div className="mb-2">
             <label>
-              <strong>Weight (kg):</strong>
+              <strong>Weight:</strong>
               <Input type="number" name="weight" step="0.01" defaultValue={set.weight} required />
             </label>
           </div>

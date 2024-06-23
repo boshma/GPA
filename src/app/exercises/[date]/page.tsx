@@ -51,7 +51,6 @@ export default async function ExercisesByDatePage({
         {exercises.map((exercise) => (
           <ExerciseTable key={exercise.id} exercise={exercise} />
         ))}
-        <Link href="/addExercise">Add Exercise</Link>
       </SignedIn>
     </main>
   );
