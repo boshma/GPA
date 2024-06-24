@@ -3,6 +3,7 @@ import { clerkClient } from "@clerk/nextjs/server";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { getExerciseById, updateExercise, deleteExercise } from "~/server/queries";
+import { Icon } from "@iconify/react";
 
 export async function EditExerciseForm(props: { exerciseId: string }) {
 
@@ -32,8 +33,8 @@ export async function EditExerciseForm(props: { exerciseId: string }) {
               <Input type="text" name="name" defaultValue={exercise.name} required />
             </label>
           </div>
-          <Button type="submit" variant="default">
-            Save Changes
+          <Button type="submit" variant="ghost" className="icon-button">
+          <Icon icon="material-symbols:done" style={{ color: '#ffffff', fontSize: '24px' }} />
           </Button>
         </form>
 
@@ -44,8 +45,8 @@ export async function EditExerciseForm(props: { exerciseId: string }) {
             await deleteExercise(exercise.id);
           }}
         >
-          <Button type="submit" variant="destructive">
-            Delete
+          <Button type="submit" variant="ghost" className="icon-button">
+          <Icon icon="material-symbols:delete" style={{ color: "#ef0606", fontSize: '24px' }} />
           </Button>
         </form>
 

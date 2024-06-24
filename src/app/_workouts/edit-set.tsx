@@ -2,6 +2,7 @@
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { deleteSet, getSetById, updateSet } from "~/server/queries";
+import { Icon } from "@iconify/react";
 
 export async function EditSetForm(props: { setId: string }) {
   const set = await getSetById(parseInt(props.setId, 10));
@@ -34,8 +35,8 @@ export async function EditSetForm(props: { setId: string }) {
               <Input type="number" name="weight" step="0.01" defaultValue={set.weight} required />
             </label>
           </div>
-          <Button type="submit" variant="default">
-            Save Changes
+          <Button type="submit" variant="ghost" className="icon-button">
+          <Icon icon="material-symbols:done" style={{ color: '#ffffff', fontSize: '24px' }} />
           </Button>
         </form>
 
@@ -46,8 +47,8 @@ export async function EditSetForm(props: { setId: string }) {
             await deleteSet(set.id);
           }}
         >
-          <Button type="submit" variant="destructive">
-            Delete
+        <Button type="submit" variant="ghost" className="icon-button">
+          <Icon icon="material-symbols:delete" style={{ color: "#ef0606", fontSize: '24px' }} />
           </Button>
         </form>
       </div>

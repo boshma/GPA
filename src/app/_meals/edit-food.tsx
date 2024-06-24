@@ -3,6 +3,7 @@ import { clerkClient } from "@clerk/nextjs/server";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { deleteMeal, getMealById, updateMeal } from "~/server/queries";
+import { Icon } from "@iconify/react";
 
 export async function EditMealForm(props: { mealId: string }) {
   const meal = await getMealById(props.mealId);
@@ -51,11 +52,10 @@ export async function EditMealForm(props: { mealId: string }) {
               <Input type="number" name="fat" step="0.01" defaultValue={meal.fat} required />
             </label>
           </div>
-          <Button type="submit" variant="default">
-            Save Changes
+          <Button type="submit" variant="ghost" className="icon-button">
+          <Icon icon="material-symbols:done" style={{ color: '#ffffff', fontSize: '24px' }} />
           </Button>
         </form>
-
         <form
           action={async () => {
             "use server";
@@ -63,16 +63,14 @@ export async function EditMealForm(props: { mealId: string }) {
             await deleteMeal(meal.id);
           }}
         >
-          <Button type="submit" variant="destructive">
-            Delete
+          <Button type="submit" variant="ghost" className="icon-button">
+          <Icon icon="material-symbols:delete" style={{ color: "#ef0606", fontSize: '24px' }} />
           </Button>
         </form>
 
         <div className="mb-2">
           <strong>Uploaded By:</strong> {userInfo.fullName}
         </div>
-
-
       </div>
     </div>
   );
