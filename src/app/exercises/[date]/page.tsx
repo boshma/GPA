@@ -39,7 +39,6 @@ export default async function ExercisesByDatePage({
           <div className="h-full w-full text-center text-2xl">
             No exercises found for this date
           </div>
-          <Link href="/addExercise">Add Exercise</Link>
         </SignedIn>
       </main>
     );

@@ -11,6 +11,8 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { Exercise } from "~/server/types";
+import { Button } from "~/components/ui/button";
+import { addSetToExercise } from "~/server/queries";
 
 interface ExerciseTableProps {
   exercise: Exercise;
@@ -24,6 +26,14 @@ export default function ExerciseTable({ exercise }: ExerciseTableProps) {
     <Table>
       <TableCaption>
         <Link href={`/exercise/${exercise.id}`}>{exercise.name}</Link>
+        <form action={async () => {
+          "use server";
+          await addSetToExercise(exercise.id);
+        }}>
+          <Button type="submit" variant="ghost" className="icon-button">
+            Add Set
+          </Button>
+        </form>
       </TableCaption>
       <TableHeader>
         <TableRow>

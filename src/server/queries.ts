@@ -445,3 +445,31 @@ export async function deleteSet(id: number) {
   const today = moment().tz("America/Los_Angeles").format("YYYY-MM-DD");
   redirect(`/exercises/${today}`);
 }
+
+export async function addSetToExercise(exerciseId: number) {
+  const user = auth();
+  if (!user.userId) throw new Error("Not authenticated");
+
+  const now = new Date().toISOString(); 
+
+  await db.insert(sets).values({
+    exerciseId: sql`${exerciseId}`,
+    repetitions: sql`0`, 
+    weight: sql`0`,    
+    createdAt: sql`${now}`,
+    updatedAt: sql`${now}`,
+  });
+
+  analyticsServerClient.capture({
+    distinctId: user.userId,
+    event: "add set",
+    properties: {
+      exerciseId,
+      repetitions: 0,
+      weight: 0,
+    },
+  });
+
+  const today = moment().tz("America/Los_Angeles").format("YYYY-MM-DD");
+  redirect(`/exercises/${today}`);
+}
