@@ -9,7 +9,7 @@ import {
 } from "~/components/ui/carousel";
 
 const foodImages = [
-  "/FoodLog.jpg",
+  "/Foodlog.jpg",
   "/AddFood.jpg",
   "/UpdatedFoodLog.jpg",
   "/calendar.jpg",
