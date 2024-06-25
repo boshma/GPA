@@ -34,7 +34,7 @@ export async function EditExerciseForm(props: { exerciseId: string }) {
             </label>
           </div>
           <Button type="submit" variant="ghost" className="icon-button">
-          <Icon icon="material-symbols:done" style={{ color: '#ffffff', fontSize: '24px' }} />
+            <Icon icon="material-symbols:done" style={{ color: '#ffffff', fontSize: '24px' }} />
           </Button>
         </form>
 
@@ -46,7 +46,7 @@ export async function EditExerciseForm(props: { exerciseId: string }) {
           }}
         >
           <Button type="submit" variant="ghost" className="icon-button">
-          <Icon icon="material-symbols:delete" style={{ color: "#ef0606", fontSize: '24px' }} />
+            <Icon icon="material-symbols:delete" style={{ color: "#ef0606", fontSize: '24px' }} />
           </Button>
         </form>
 
