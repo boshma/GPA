@@ -1,6 +1,6 @@
-//src/app/_meals/add-meal.tsx
+//src/app/meals/_meals/add-meal.tsx
 import { SignedIn, SignedOut } from "@clerk/nextjs";
-import { AddMealForm } from "../_meals/add-meal";
+import { AddMealForm } from "~/app/_meals/add-meal";
 
 export const dynamic = "force-dynamic";
 

@@ -51,7 +51,7 @@ export default function MealTable({ meals }: MealTableProps) {
         {meals.map((meal) => (
           <TableRow key={meal.id}>
             <TableCell className="font-medium">
-              <Link href={`/meal/${meal.id}`}>{meal.name}</Link>
+              <Link href={`meal/${meal.id}`}>{meal.name}</Link>
             </TableCell>
             <TableCell>{meal.protein}</TableCell>
             <TableCell>{meal.carbs}</TableCell>

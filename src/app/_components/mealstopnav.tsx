@@ -25,7 +25,7 @@ export function MealsTopNav() {
   const formatDate = (date: Date) => date.toISOString().split('T')[0];
 
   const handleDayClick = (date: Date) => {
-    router.push(`/meals/${formatDate(date)}`);
+    router.push(`meals/${formatDate(date)}`);
     setIsCalendarVisible(false); 
   };
 
@@ -36,7 +36,7 @@ export function MealsTopNav() {
   return (
     <nav className="relative flex w-full items-center justify-between border-b p-4">
       <div>
-        <Link href="/addMeal">Add Meal</Link>
+        <Link href="addMeal">Add Meal</Link>
       </div>
       <div className="flex flex-row gap-4 items-center">
         <span onClick={toggleCalendarVisibility} style={{ cursor: "pointer" }}>

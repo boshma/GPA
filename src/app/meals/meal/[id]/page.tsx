@@ -1,4 +1,4 @@
-//src/app/meal/[id]/page.tsx
+//src/app/meals/meal/[id]/page.tsx
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { EditMealForm } from "~/app/_meals/edit-food";
 
