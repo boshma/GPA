@@ -36,7 +36,7 @@ export function ExercisesTopNav() {
   return (
     <nav className="relative flex w-full items-center justify-between border-b p-4">
       <div>
-        <Link href="/addExercise">Add Exercise</Link>
+        <Link href="addExercise">Add Exercise</Link>
       </div>
       <div className="flex flex-row gap-4 items-center">
         <span onClick={toggleCalendarVisibility} style={{ cursor: "pointer" }}>

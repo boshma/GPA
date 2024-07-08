@@ -1,6 +1,6 @@
 //src/app/addExercise/page.tsx
 import { SignedIn, SignedOut } from "@clerk/nextjs";
-import { AddExerciseForm } from "../_workouts/add-exercise";
+import { AddExerciseForm } from "~/app/_workouts/add-exercise";
 
 
 export const dynamic = "force-dynamic";

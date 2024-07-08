@@ -25,7 +25,7 @@ export default function ExerciseTable({ exercise }: ExerciseTableProps) {
   return (
     <Table>
       <TableCaption>
-        <Link href={`/exercise/${exercise.id}`}>{exercise.name}</Link>
+        <Link href={`exercise/${exercise.id}`}>{exercise.name}</Link>
         <form action={async () => {
           "use server";
           await addSetToExercise(exercise.id);
@@ -46,7 +46,7 @@ export default function ExerciseTable({ exercise }: ExerciseTableProps) {
         <TableRow>
           {sortedSets.map((set, index) => (
             <TableCell key={index}>
-              <Link href={`/set/${set.id}`}>
+              <Link href={`set/${set.id}`}>
                 {set.repetitions}x{set.weight}
               </Link>
             </TableCell>
