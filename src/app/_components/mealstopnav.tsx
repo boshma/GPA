@@ -25,7 +25,7 @@ export function MealsTopNav() {
   const formatDate = (date: Date) => date.toISOString().split('T')[0];
 
   const handleDayClick = (date: Date) => {
-    router.push(`meals/${formatDate(date)}`);
+    router.push(`/meals/${formatDate(date)}`);
     setIsCalendarVisible(false); 
   };
 
